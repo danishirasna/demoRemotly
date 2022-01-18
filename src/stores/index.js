@@ -1,7 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
-import data from './data'
-export default configureStore({
+import { setupListeners } from '@reduxjs/toolkit/query'
+import {ordersApi} from './data'
+export const store =configureStore({
   reducer: {
-    dataStore:data,
+    [ordersApi.reducerPath]:ordersApi.reducer
   },
-})
+  middleware:(getDefaultMiddleware)=>
+    getDefaultMiddleware().concat(ordersApi.middleware)
+  
+});
+setupListeners(store.dispatch)

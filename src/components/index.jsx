@@ -56,7 +56,7 @@ class Index extends React.Component {
           <Counts />
         </div> */}
         <div>
-          <h1>Demo With Golden Layout</h1>
+          <h1>Demo With Antd & Golden Layout Using Redux Toolkit</h1>
           <GL />
         </div>
       </div>

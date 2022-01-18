@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { decrement, increment } from '../../stores/data'
-import { connect } from "react-redux";
+import React, { useState, useEffect } from 'react'
+// import { useSelector, useDispatch } from 'react-redux'
+// import { decrement, increment, getData } from '../../stores/data'
+// import { connect } from "react-redux";
+import { useGetOrdersQuery } from '../../stores/data';
 import { Card } from "@blueprintjs/core";
 import { Table, Input, Button, Space } from 'antd';
 import Highlighter from 'react-highlight-words';
@@ -100,11 +101,37 @@ class Test extends React.Component {
     render() {
         const columns = [
             {
+                title: 'Id',
+                dataIndex: 'id',
+                key: 'id',
+                ...this.getColumnSearchProps('id'),
+                sorter: (a, b) => a.id - b.id,
+                sortDirections: ['descend', 'ascend'],
+                ellipsis: true,
+                align: 'right',
+            },
+            {
+                title: 'Color',
+                dataIndex: 'color',
+                key: 'color',
+                ...this.getColumnSearchProps('color'),
+                sorter: (a, b) => a.color.length - b.color.length,
+                sortDirections: ['descend', 'ascend'],
+            },
+            {
                 title: 'Name',
                 dataIndex: 'name',
                 key: 'name',
                 ...this.getColumnSearchProps('name'),
                 sorter: (a, b) => a.name.length - b.name.length,
+                sortDirections: ['descend', 'ascend'],
+            },
+            {
+                title: 'Pantone',
+                dataIndex: 'pantone_value',
+                key: 'pantone_value',
+                ...this.getColumnSearchProps('pantone_value'),
+                sorter: (a, b) => a.pantone_value.length - b.pantone_value.length,
                 sortDirections: ['descend', 'ascend'],
             },
             {
@@ -137,10 +164,18 @@ class Test extends React.Component {
                 render: p => '$' + numeral(p).format("0,0")
             },
         ];
+        let tempArr = this.props.data?.data;
+        let temp = []
+        if (tempArr?.length > 0) {
+            for (const [index, iterator] of tempArr.entries()) {
+                temp.push({ ...iterator, age: `3${index}`, price: `3005${index}`, address: `luis sum ${index} ${iterator.name}` })
+            }
+        }
+
         return (
             <div>
                 <Example>
-                    <Table columns={columns} dataSource={this.props.data} pagination={false} />
+                    <Table columns={columns} dataSource={temp} pagination={false} />
                 </Example>
 
             </div>
@@ -148,8 +183,8 @@ class Test extends React.Component {
     }
 }
 export function Demo() {
-    const data = useSelector((state) => state.dataStore.data)
-
+    // const [getData, setGetData] = useState([]);
+    const { data } = useGetOrdersQuery();
     return (
         <Test data={data} />
     )
